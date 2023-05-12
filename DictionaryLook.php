@@ -203,6 +203,50 @@ class DictionaryLook extends PluginBase {
         return; 
     }
 
+    public function getPluginSettings($getValues = true)
+    {
+        $surveys = $this->getSurveySelectList();
+
+        $this->settings = [
+            'globalSurveyId' => array(
+                'type'=>'select',
+                'options' => $surveys,
+                'htmlOptions'=>array(
+                    'empty'=>$this->t("None"),
+                ),
+                'label' => $this->t('Suggested Dictionary Survey:'),
+                'help' => 'Survey holding all the suggested terms and definitions. This is the source for the dashboard.',
+            ),
+    ];
+
+        return parent::getPluginSettings($getValues);
+    }
+
+    protected function getSurveySelectList()
+    {
+        // Get the survey list according to user permissions
+        $oSurvey = new \Survey;
+        $oSurvey->permission(\Yii::app()->user->getId());
+        $aoSurveys = $oSurvey->with(
+            array(
+                'languagesettings' => 
+                    array(
+                        'condition' =>
+                        'surveyls_language=language'), 
+                'owner'
+                )
+            )->findAll();
+
+        // Compose list
+        $aSurveys = [];
+        foreach($aoSurveys as $survey)
+        {
+            $aSurveys[ $survey->sid ]= "[". $survey->sid . "] " . $survey->LocalizedTitle;
+        }
+
+        return $aSurveys;
+    }
+
     public function lookup()
     {
         $request = Yii::app()->request;
