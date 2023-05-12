@@ -1,5 +1,9 @@
 $(document).ready(function (){
 console.log('dictLook');
+
+
+//PROBANDO CAMBIOS 
+
 // Apply QTip to all elements of class "dictLookup"
 $('.dictLookup').each(function() {
     /**
