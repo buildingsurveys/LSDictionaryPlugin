@@ -15,20 +15,6 @@ function clearDictLookup()
      */
     $('.question-text .dictLookup:not([data-term]), .label-text .dictLookup:not([data-term]), .group-description-container .dictLookup:not([data-term])').contents().unwrap();
     return;
-
-    /**
-     * Old way of removing embedded dictLookup spans
-     */
-    $('.question-text, .label-text, .group-description-container').each(function()
-    {
-        var arrayDictClass = $(this).find('.dictLookup:not([data-term])');
-
-        arrayDictClass.each(function(index, value){
-            var wordInsideTag = $(this).text();
-
-            $(this).replaceWith(wordInsideTag);
-        });
-    });
 }
 
 function recoverListDict(langCurrent)
@@ -95,7 +81,7 @@ function defineListDictOnSurvey(arrayDictList)
             newPhrase = phraseText.replace(
                 regExpValue,
                 function(match, $1, $2, $3){
-                    return $1 + '<span class="dictLookup">' + $2 + '</span><span class="fa fa-exclamation-circle" aria-hidden="true">' + $3;
+                    return $1 + '<span class="dictLookup">' + $2 + '</span><span class="fa fa-info-circle" aria-hidden="true">' + $3;
                 }
             );
             $(this).html(newPhrase);
