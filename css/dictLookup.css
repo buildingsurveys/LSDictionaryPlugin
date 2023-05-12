@@ -1,0 +1,12 @@
+.qtip {
+    font-size: 15px;
+    line-height: 1.2;
+}
+
+.qtip-title {
+    text-transform: capitalize;
+}
+
+.dictLookup {
+    border-bottom: 1px dashed #2382c0;
+}
