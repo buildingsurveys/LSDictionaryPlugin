@@ -214,7 +214,7 @@ class DictionaryLook extends PluginBase {
     {
         $term = $_GET['t'];
         $lang = $_GET['l'];
-        $definitionTerm = $this->getDefnitions($_GET['surveyId'], $term);
+        $definitionTerm = $this->getDefinitions($_GET['surveyId'], $term);
         return json_encode($definitionTerm);
     }
 
@@ -265,7 +265,7 @@ class DictionaryLook extends PluginBase {
         return $termResponse;
     }
 
-    public function getDefnitions($surveyId, $term)
+    public function getDefinitions($surveyId, $term)
     {
         $dictionarySurveyId = $this->get('dictionarySurvey', 'Survey', $surveyId);
         $sourceQuestion = Question::model()->findByAttributes(
@@ -303,8 +303,8 @@ class DictionaryLook extends PluginBase {
 
     protected function t($string)
     {
-        $messageSource = get_class($this).'Lang';
-        return \Yii::t('',$string,array(),$messageSource);
+        $messageSource = get_class($this) . 'Lang';
+        return \Yii::t('', $string,array(), $messageSource);
     }
     
     /**
