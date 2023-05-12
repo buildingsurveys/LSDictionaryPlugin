@@ -41,7 +41,7 @@ function recoverListDict(langCurrent)
         dataType: 'json',
     })
     .done(function(data){
-        arrayResult = JSON.parse(data);
+        arrayResult = data;
         console.log(arrayResult)
     })
     .fail(function(xhr){

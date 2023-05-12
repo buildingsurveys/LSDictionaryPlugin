@@ -198,7 +198,7 @@ class DictionaryLook extends PluginBase {
          * Finish output 
          */ 
         // $out->addContent($content); 
-        echo json_encode($content);
+        echo $content;
         // $oEvent->addContent($this, $content); 
         return; 
     }
@@ -207,14 +207,7 @@ class DictionaryLook extends PluginBase {
     {
         if (empty($_GET['l'])) die('No language defined');
         $termList = $this->getTerms($_GET['surveyId']);
-        return $termList;
-
-        $lang = $_GET['l'];
-        $defs = include 'php/dictionary-'.$lang.'.php';
-        $defs = array_change_key_case($defs, CASE_LOWER);
-        $keys = array_keys($defs);
-
-        return json_encode($keys);
+        return CJSON::encode($termList);
     }
 
     public function searchWord()
@@ -222,17 +215,7 @@ class DictionaryLook extends PluginBase {
         $term = $_GET['t'];
         $lang = $_GET['l'];
         $definitionTerm = $this->getDefnitions($_GET['surveyId'], $term);
-        return $definitionTerm;
-
-        $defs = include 'php/dictionary-'.$lang.'.php';
-
-        $defs = array_change_key_case($defs, CASE_LOWER);
-        $term = trim(strtolower($term));
-        $definition = "Sorry. The term wasn't found.";
-
-        if (array_key_exists($term, $defs))
-            $definition = $defs[$term];
-        return $definition;
+        return json_encode($definitionTerm);
     }
 
     protected function getPluginFileUrl($relativePath)
@@ -271,7 +254,6 @@ class DictionaryLook extends PluginBase {
     {
         $termResponse = [];
         $dictionarySurveyId = $this->get('dictionarySurvey', 'Survey', $surveyId);
-        // $questionId = $this->get('termQuestionCode', 'Survey', $surveyId);        
         $response = \SurveyDynamic::model($dictionarySurveyId)->findAll();
         $sourceQuestion = Question::model()->findByAttributes(array('sid' => $dictionarySurveyId));
         $questionColumnCode = $this->getSGQ($sourceQuestion);
@@ -280,7 +262,7 @@ class DictionaryLook extends PluginBase {
             array_push($termResponse, $value[$questionColumnCode]);
         }
 
-        return CJSON::encode($termResponse);
+        return $termResponse;
     }
 
     public function getDefnitions($surveyId, $term)
