@@ -4,7 +4,7 @@ console.log('dictLook');
 
 //PROBANDO CAMBIOS 
 
-// Apply QTip to all elements of class "dictLookup"
+// Apply popover to all elements of class "dictLookup"
 $('.dictLookup').each(function() {
     /**
      * Init
@@ -21,7 +21,7 @@ $('.dictLookup').each(function() {
     // Compose Title
     let title = term.substring(0, 3) != 'REF' ? term : 'Reference #' +  term.substring(3);
     let lang = GetCurrPageLang();
-    console.log("Setting up QTip for " + term, $this);
+    console.log("Setting up popover for " + term, $this);
     const firstPopover = $(this).popover(defaultPopoverOptions(
         {
             content: 'Loading...',

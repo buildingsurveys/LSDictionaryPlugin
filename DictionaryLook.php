@@ -219,6 +219,8 @@ class DictionaryLook extends PluginBase {
         $lang = $request->getParam('l', null);
         $surveyId = $request->getParam('surveyId', null);
         $definitionTerm = $this->getDefinitions($surveyId, $term);
+        // echo "Sorry. The term wasn't found.";
+
         return json_encode($definitionTerm);
     }
 
@@ -256,12 +258,19 @@ class DictionaryLook extends PluginBase {
 
     public function getTerms($surveyId)
     {
-        $termResponse = [];
+        // Pickup Dictionary Survey
         $dictionarySurveyId = $this->get('dictionarySurvey', 'Survey', $surveyId);
         $response = \SurveyDynamic::model($dictionarySurveyId)->findAll();
-        $sourceQuestion = Question::model()->findByAttributes(array('sid' => $dictionarySurveyId));
+    
+        // Pickup Term Question Code
+        $termQuestionTitleCode = $this->get('termQuestionCode', 'Survey', $surveyId);
+        $sourceQuestion = Question::model()->findByAttributes(array(
+            'sid' => $dictionarySurveyId,
+            'title' => $termQuestionTitleCode
+        ));
         $questionColumnCode = $this->getSGQ($sourceQuestion);
 
+        $termResponse = [];
         foreach($response as $value){
             array_push($termResponse, $value[$questionColumnCode]);
         }
@@ -271,28 +280,40 @@ class DictionaryLook extends PluginBase {
 
     public function getDefinitions($surveyId, $term)
     {
+        // Get plugin settings
         $dictionarySurveyId = $this->get('dictionarySurvey', 'Survey', $surveyId);
-        $sourceQuestion = Question::model()->findByAttributes(
+        $termQuestionTitleSetting = $this->get('termQuestionCode', 'Survey', $surveyId);
+        $definitionQuestionTitleSetting = $this->get('definitionQuestionCode', 'Survey', $surveyId);
+        $sourceQuestions = Question::model()->findAllByAttributes(
             array(
                 'sid' => $dictionarySurveyId,
             )
         );
-        $sourceTerm = Question::model()->findByAttributes(
-            array(
-                'sid' => $dictionarySurveyId,
-                'title' => 'def',
-            )
-        );
-        $questionColumnCode = $this->getSGQ($sourceQuestion);
-        $termColumnCode = $this->getSGQ($sourceTerm);
+
+        // Get records
+        $recordWithTermCode = $this->getRecordByTitle($sourceQuestions, $termQuestionTitleSetting);
+        $recordWithDefCode = $this->getRecordByTitle($sourceQuestions, $definitionQuestionTitleSetting);
+
+        // Get record columns 
+        $questionTermColumnCode = $this->getSGQ($recordWithTermCode);
+        $questionDefColumnCode = $this->getSGQ($recordWithDefCode);
 
         $definitionRaw = SurveyDynamic::model($dictionarySurveyId)->findByAttributes(
             array(
-                $questionColumnCode => $term,
+                $questionTermColumnCode => $term,
             )
         );
 
-        return $definitionRaw[$termColumnCode];
+        return $definitionRaw[$questionDefColumnCode];
+    }
+
+    protected function getRecordByTitle($questions, $title)
+    {
+        foreach($questions as $question){
+            if($question->title === $title)
+            return $question;
+        }
+        return null;
     }
 
     // Get a SGQ from a Question
