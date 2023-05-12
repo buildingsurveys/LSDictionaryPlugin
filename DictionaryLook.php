@@ -297,6 +297,9 @@ class DictionaryLook extends PluginBase {
 
     public function searchWord()
     {
+        // Check if plugin is active for this survey
+        if (!$this->checkActiveSetting()) return;
+
         $request = Yii::app()->request;
         $term = $request->getParam('t', null);
         $lang = $request->getParam('l', null);
