@@ -10,3 +10,7 @@
 .dictLookup {
     border-bottom: 1px dashed #2382c0;
 }
+
+.fruity .popover-header {
+    background-color: #ebf0fa;
+}

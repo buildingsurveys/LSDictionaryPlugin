@@ -18,6 +18,14 @@ $('.dictLookup').each(function() {
     let dataTerm = $this.attr('data-term');
     if (typeof dataTerm != 'undefined') term = dataTerm;
 
+    const popoverTemplate = `
+        <div class="popover" role="tooltip">
+            <div class="arrow"></div>
+            <h3 class="popover-title popover-header"></h3>
+            <div class="popover-content"></div>
+        </div>
+    `;
+
     // Compose Title
     let title = term.substring(0, 3) != 'REF' ? term : 'Reference #' +  term.substring(3);
     let lang = GetCurrPageLang();
@@ -26,6 +34,7 @@ $('.dictLookup').each(function() {
         {
             content: 'Loading...',
             title,
+            template: popoverTemplate,
         })
     );
     const dictLookupElement = $(this);
@@ -38,8 +47,10 @@ $('.dictLookup').each(function() {
         dictLookupElement.popover(defaultPopoverOptions(
             {
                 title,
+                html: true,
                 placement: 'auto',
                 content,
+                template: popoverTemplate,
                 delay: 500,
             })
         );
