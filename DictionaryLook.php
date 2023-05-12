@@ -252,8 +252,19 @@ class DictionaryLook extends PluginBase {
         $request = Yii::app()->request;
         $lang = $request->getParam('l', null);
         if (empty($lang)) die('No language defined');
-        $termList = $this->getTerms($request->getParam('surveyId', null));
-        return CJSON::encode($termList);
+
+        // Pickup Dictionary Survey
+        $surveyId = $request->getParam('surveyId', null);
+        $dictionarySurveyId = $this->get('dictionarySurvey', 'Survey', $surveyId);
+        // Get General an specific list terms  
+        $termList = $this->getTerms($surveyId, $dictionarySurveyId);
+        $globalTermList = $this->getTerms(
+            $surveyId,
+            $this->get('globalSurveyId')
+        );
+        $totalTermList = array_merge($termList, $globalTermList);
+
+        return CJSON::encode($totalTermList);
     }
 
     public function searchWord()
@@ -261,11 +272,17 @@ class DictionaryLook extends PluginBase {
         $request = Yii::app()->request;
         $term = $request->getParam('t', null);
         $lang = $request->getParam('l', null);
+        // Pickup Dictionary Survey
         $surveyId = $request->getParam('surveyId', null);
-        $definitionTerm = $this->getDefinitions($surveyId, $term);
-        // echo "Sorry. The term wasn't found.";
+        $dictionarySurveyId = $this->get('dictionarySurvey', 'Survey', $surveyId);
+        // Get definitions
+        $definitionTerm = $this->getDefinitions($surveyId, $dictionarySurveyId, $term);
+        $finalDefinitionTerm = $definitionTerm ? 
+            $definitionTerm : 
+            $this->getDefinitions($surveyId, $this->get('globalSurveyId'), $term);
+        if(!$finalDefinitionTerm) echo "Sorry. The term wasn't found.";
 
-        return json_encode($definitionTerm);
+        return json_encode($finalDefinitionTerm);
     }
 
     protected function getPluginFileUrl($relativePath)
@@ -300,10 +317,9 @@ class DictionaryLook extends PluginBase {
         return $this->getPluginDir() . '/' . $relativePath;
     }
 
-    public function getTerms($surveyId)
+    public function getTerms($surveyId, $dictionarySurveyId)
     {
-        // Pickup Dictionary Survey
-        $dictionarySurveyId = $this->get('dictionarySurvey', 'Survey', $surveyId);
+        // Pickup Dictionary Survey terms
         $response = \SurveyDynamic::model($dictionarySurveyId)->findAll();
     
         // Pickup Term Question Code
@@ -322,10 +338,9 @@ class DictionaryLook extends PluginBase {
         return $termResponse;
     }
 
-    public function getDefinitions($surveyId, $term)
+    public function getDefinitions($surveyId, $dictionarySurveyId, $term)
     {
         // Get plugin settings
-        $dictionarySurveyId = $this->get('dictionarySurvey', 'Survey', $surveyId);
         $termQuestionTitleSetting = $this->get('termQuestionCode', 'Survey', $surveyId);
         $definitionQuestionTitleSetting = $this->get('definitionQuestionCode', 'Survey', $surveyId);
         $sourceQuestions = Question::model()->findAllByAttributes(
