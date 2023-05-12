@@ -205,16 +205,20 @@ class DictionaryLook extends PluginBase {
 
     public function lookup()
     {
-        if (empty($_GET['l'])) die('No language defined');
-        $termList = $this->getTerms($_GET['surveyId']);
+        $request = Yii::app()->request;
+        $lang = $request->getParam('l', null);
+        if (empty($lang)) die('No language defined');
+        $termList = $this->getTerms($request->getParam('surveyId', null));
         return CJSON::encode($termList);
     }
 
     public function searchWord()
     {
-        $term = $_GET['t'];
-        $lang = $_GET['l'];
-        $definitionTerm = $this->getDefinitions($_GET['surveyId'], $term);
+        $request = Yii::app()->request;
+        $term = $request->getParam('t', null);
+        $lang = $request->getParam('l', null);
+        $surveyId = $request->getParam('surveyId', null);
+        $definitionTerm = $this->getDefinitions($surveyId, $term);
         return json_encode($definitionTerm);
     }
 
