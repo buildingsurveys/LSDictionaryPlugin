@@ -58,6 +58,7 @@ function sortListDictByWordCount(array)
 function defineListDictOnSurvey(arrayDictList)
 {
     // Sort array by word count as to make bigger terms to match first
+    const { termScanSelector } = configs;
     arrayDictList = sortListDictByWordCount(arrayDictList);
 
     // Process term list
@@ -65,10 +66,7 @@ function defineListDictOnSurvey(arrayDictList)
     {
         let term = arrayDictList[pos].trim();
         // Search in elements and replace
-        
-        // $('div.question-text, li.answer-item, div.question-valid-container')
-
-        $('div.question-text, li.answer-item, div.question-valid-container, div.question-help-container')
+        $(termScanSelector)
             .each(function(index, value){
             
             // @todo: Apply this: https://stackoverflow.com/questions/3460004/regexp-to-search-replace-only-text-not-in-html-attribute
