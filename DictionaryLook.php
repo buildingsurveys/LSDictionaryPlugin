@@ -60,6 +60,7 @@ class DictionaryLook extends PluginBase {
         );
 
         // Register JS & CSS
+        $client->registerScriptFile($this->getPluginFileUrl('js/config.js'));
         $client->registerScriptFile($this->getPluginFileUrl('js/dictSetup.js'));
         $client->registerScriptFile($this->getPluginFileUrl('js/language.js'));
         $client->registerScriptFile($this->getPluginFileUrl('js/dictLookup.js'));
@@ -95,7 +96,13 @@ class DictionaryLook extends PluginBase {
                 'label' => $this->t('Definition question:'),
                 'current' => $this->beforeSurveySettings_Current('definitionQuestionCode'),
                 'help' => 'Question code of the question holding the definitions',
-            ),            
+            ),
+            'active' => array(
+                'type' => 'boolean',
+                'default' => 0,
+                'label' => 'Activate plugin for this survey:',
+                'current' => $this->get('active', 'Survey', $event->get('survey'))
+            ),
         );
         // echo $this->beforeSurveySettings_Current('dictionarySurvey');
         // Set all settings
@@ -105,6 +112,26 @@ class DictionaryLook extends PluginBase {
         ));
     }
 
+    /**
+     * Checks if a survey setting is active
+     */
+    protected function isSurveySettingActive($setting, $surveyId = NULL, $surveyAtt = 'surveyId')
+    {
+        $event = $this->getEvent();
+        if (empty($surveyId)) $surveyId = $event->get($surveyAtt);
+
+        $val = $this->get($setting, 'Survey', $surveyId);
+        return ($val == TRUE || $val > 0);
+    }
+
+    protected function checkActiveSetting()
+    {
+        $request = Yii::app()->request;
+        $surveyId = $request->getParam('surveyId', null);
+        $isActive = $this->isSurveySettingActive('active', $surveyId);
+        return $isActive;
+    }
+    
     public function newSurveySettings()
     {
         $event = $this->event;
@@ -251,6 +278,7 @@ class DictionaryLook extends PluginBase {
     {
         $request = Yii::app()->request;
         $lang = $request->getParam('l', null);
+        if (!$this->checkActiveSetting()) return;
         if (empty($lang)) die('No language defined');
 
         // Pickup Dictionary Survey
