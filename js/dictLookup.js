@@ -1,9 +1,6 @@
 $(document).ready(function (){
 console.log('dictLook');
 
-
-//PROBANDO CAMBIOS 
-
 // Apply popover to all elements of class "dictLookup"
 $('.dictLookup').each(function() {
     /**
@@ -30,14 +27,14 @@ $('.dictLookup').each(function() {
     let title = term.substring(0, 3) != 'REF' ? term : 'Reference #' +  term.substring(3);
     let lang = GetCurrPageLang();
     console.log("Setting up popover for " + term, $this);
-    const firstPopover = $(this).popover(defaultPopoverOptions(
+    const firstPopover = $(this).children().popover(defaultPopoverOptions(
         {
             content: 'Loading...',
             title,
             template: popoverTemplate,
         })
     );
-    const dictLookupElement = $(this);
+    const dictLookupElement = $(this).children();
     $.ajax({
         url: _dictUrl + '&t=' + term + '&l=' + lang
     })
@@ -51,7 +48,6 @@ $('.dictLookup').each(function() {
                 placement: 'auto',
                 content,
                 template: popoverTemplate,
-                delay: 500,
             })
         );
     });
