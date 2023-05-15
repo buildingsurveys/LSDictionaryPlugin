@@ -79,13 +79,13 @@ function defineListDictOnSurvey(arrayDictList)
             newPhrase = phraseText.replace(
                 regExpValue,
                 function(match, $1, $2, $3){
-                    return $1 + '<span class="dictLookup">' + $2 + '</span><span class="fa fa-info-circle" aria-hidden="true">' + $3;
+                    return $1 + '<span class="dictLookup">' + $2 + '</span>' + $3;
                 }
             );
             $(this).html(newPhrase);
 
             // As the terms are getting processed from longest to smallest,
-            // some nested dictLookup tags are createdd
+            // some nested dictLookup tags are created
             // Example terms: "formal alternative care" and "alternative care"
             // As that, we remove child ones
             $('.dictLookup > .dictLookup').contents().unwrap()
@@ -95,6 +95,10 @@ function defineListDictOnSurvey(arrayDictList)
     }
 }
 
+function addInformationIconToTerms(){
+    $('.dictLookup').append('<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>')
+}
+
 $(document).ready(function(){
     let langCurrent = GetCurrPageLang();
 
@@ -102,4 +106,5 @@ $(document).ready(function(){
 
     let arrayDictList = recoverListDict(langCurrent);
     defineListDictOnSurvey(arrayDictList);
+    addInformationIconToTerms();
 });

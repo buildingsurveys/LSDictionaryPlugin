@@ -1,3 +1,3 @@
 const configs = {
-    termScanSelector: 'div.question-text, li.answer-item, div.question-valid-container, div.question-help-container'
+    termScanSelector: 'div.question-text, .answer-container, div.question-valid-container, div.question-help-container'
 };
