@@ -95,14 +95,16 @@ function defineListDictOnSurvey(arrayDictList)
     }
 }
 
-function addInformationIconToTerms(){
-    let finalIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>' 
-    if (typeof callbackDictLoopUpIcon != 'undefined' 
-        && typeof window[callbackDictLoopUpIcon] != 'undefined') { 
-        finalIcon = window[callbackDictLoopUpIcon](); 
-    }
+function callbackDictLookupIconExists() {
+    return typeof callbackDictLookupIcon != 'undefined'
+        && typeof window[callbackDictLookupIcon] != 'undefined';
+}
 
-    $('.dictLookup').append(finalIcon);
+function addInformationIconToTerms() {
+    const defaultIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>';
+    const infoIcon = callbackDictLookupIconExists() ? window[callbackDictLookupIcon]() : defaultIcon;
+
+    $('.dictLookup').append(infoIcon);
 }
 
 $(document).ready(function(){
