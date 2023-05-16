@@ -13,6 +13,11 @@
 
 .fruity .popover-header {
     background-color: #ebf0fa;
+    color: #444444;
+}
+
+.fruity .popover-body {
+    color: #444444;
 }
 
 .info-icon {

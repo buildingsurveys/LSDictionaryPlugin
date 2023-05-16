@@ -4,7 +4,7 @@ $(document).ready(function (){
         <div class="popover" role="tooltip">
             <div class="arrow"></div>
             <h3 class="popover-title popover-header"></h3>
-            <div class="popover-content"></div>
+            <div class="popover-content popover-body"></div>
         </div>
     `;
     $(document).on('click', function (evt) {
