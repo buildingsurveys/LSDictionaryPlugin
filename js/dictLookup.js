@@ -37,7 +37,6 @@ $(document).ready(function (){
             })
             .then(function(content) {
                 // Set the tooltip content upon successful retrieval
-    //AQUI SE ASIGNA Cnombre_const ()
                 const popoverWithTerm = dictLookupElement.popover(defaultPopoverOptions(
                     {
                         title,
@@ -57,8 +56,7 @@ $(document).ready(function (){
             content,
             title,
             trigger,
-            viewport: { selector: '.outerframe', padding: 0 },
-            // viewport: $(window),
+            container: 'body',
             placement: placement,
             ...rest
         }
