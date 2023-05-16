@@ -14,6 +14,8 @@ $(document).ready(function (){
         }
 
         if(selectedElement.hasClass('info-icon')){
+            evt.stopPropagation();
+            evt.preventDefault();
             const dictLookupElement = selectedElement;
             const parentElement = selectedElement.parent();
 
