@@ -96,7 +96,13 @@ function defineListDictOnSurvey(arrayDictList)
 }
 
 function addInformationIconToTerms(){
-    $('.dictLookup').append('<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>')
+    let finalIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>' 
+    if (typeof callbackDictLoopUpIcon != 'undefined' 
+        && typeof window[callbackDictLoopUpIcon] != 'undefined') { 
+        finalIcon = window[callbackDictLoopUpIcon](); 
+    }
+
+    $('.dictLookup').append(finalIcon);
 }
 
 $(document).ready(function(){

@@ -35,7 +35,7 @@ class DictionaryLook extends PluginBase {
         $client = Yii::app()->getClientScript();
         $event = $this->getEvent();
         $surveyId = $event->get('surveyId');
-
+        $assetsUrl = $this->getPluginFileUrl('assets/info-icon.jpeg');
         $setupUrl = $this->api->createUrl('plugins/direct', 
             array(
                 'plugin' => $this->getName(),
@@ -49,6 +49,10 @@ class DictionaryLook extends PluginBase {
                 'function'=> 'searchWord', 
                 'surveyId'=> $surveyId,
             )
+        );
+        $client->registerScript(
+            self::$name . "assetsUrl", 'var assetsUrl="'.$assetsUrl.'";', 
+            CClientScript::POS_BEGIN
         );
         $client->registerScript(
             self::$name . "_lookupUrl", 'var _lookupUrl="'.$setupUrl.'";', 
