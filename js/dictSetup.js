@@ -39,18 +39,31 @@ function recoverListDict(langCurrent)
 
 function sortListDictByWordCount(array)
 {
-  function countWords(str) {
+   let arrayFilter= [];
+
+   function countWords(str) {
     return str.trim().split(/\s+/).length;
   }
 
   // set all initial frequencies for each word to zero
   var frequency = {};
+
   array.forEach(function(value, index) {
-    frequency[value] = countWords(value);
+     if(!!value){
+        arrayFilter.push(value);
+     }
+    
   });
 
+  arrayFilter.forEach(function(value, index) {
+    frequency[value] = countWords(value);
+    
+  });
+  console.log("entre a flitro");
+  console.log(arrayFilter);
+
   // sort items by word count desc
-  return array.sort(function(a, b) {
+  return arrayFilter.sort(function(a, b) {
     return frequency[b] - frequency[a];
   });
 };
@@ -97,7 +110,6 @@ function defineListDictOnSurvey(arrayDictList)
 
 function callbackDictLookupIconExists() {
     const { callbackDictLookupIcon } = configs;
-
     return typeof callbackDictLookupIcon != 'undefined'
         && typeof window[callbackDictLookupIcon] != 'undefined';
 }
