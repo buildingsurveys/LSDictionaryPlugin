@@ -46,7 +46,7 @@ function sortListDictByWordCount(array)
   }
 
   // set all initial frequencies for each word to zero
-  var frequency = {};
+  const frequency = {};
 
   array.forEach(function(value, index) {
      if(!!value){
@@ -59,9 +59,6 @@ function sortListDictByWordCount(array)
     frequency[value] = countWords(value);
     
   });
-  console.log("entre a flitro");
-  console.log(arrayFilter);
-
   // sort items by word count desc
   return arrayFilter.sort(function(a, b) {
     return frequency[b] - frequency[a];

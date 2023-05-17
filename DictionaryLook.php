@@ -359,15 +359,13 @@ class DictionaryLook extends PluginBase {
     {
         // Pickup Dictionary Survey terms
         $response = \SurveyDynamic::model($dictionarySurveyId)->findAll();
-        $definitionQuestionTitleSetting = $this->get('definitionQuestionCode', 'Survey', $surveyId);
     
         // Pickup Term Question Code
-        $termQuestionTitleCode = $this->get('termQuestionCode', 'Survey', $surveyId);
         $termQuestionTitleSetting = $this->get('termQuestionCode', 'Survey', $surveyId);
+        $definitionQuestionTitleSetting = $this->get('definitionQuestionCode', 'Survey', $surveyId);
 
         $sourceQuestion = Question::model()->findAllByAttributes(array(
             'sid' => $dictionarySurveyId,
-        
         ));
         
         // Get records
@@ -378,16 +376,11 @@ class DictionaryLook extends PluginBase {
         $questionTermColumnCode = $this->getSGQ($recordWithTermCode);
         $questionDefColumnCode = $this->getSGQ($recordWithDefCode);
 
-
         $termResponse = [];
-
         foreach($response as $value){
-
             if($value[$questionTermColumnCode] && $value[$questionDefColumnCode]){
-                
                 array_push($termResponse, $value[$questionTermColumnCode]);
             }
-            
         }
 
          return $termResponse;    
