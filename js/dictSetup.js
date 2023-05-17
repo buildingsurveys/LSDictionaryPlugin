@@ -96,11 +96,14 @@ function defineListDictOnSurvey(arrayDictList)
 }
 
 function callbackDictLookupIconExists() {
+    const { callbackDictLookupIcon } = configs;
+
     return typeof callbackDictLookupIcon != 'undefined'
         && typeof window[callbackDictLookupIcon] != 'undefined';
 }
 
 function addInformationIconToTerms() {
+    const { callbackDictLookupIcon } = configs;
     const defaultIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>';
     const infoIcon = callbackDictLookupIconExists() ? window[callbackDictLookupIcon]() : defaultIcon;
 
