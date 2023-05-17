@@ -35,7 +35,7 @@ class DictionaryLook extends PluginBase {
         $client = Yii::app()->getClientScript();
         $event = $this->getEvent();
         $surveyId = $event->get('surveyId');
-        $assetsUrl = $this->getPluginFileUrl('assets/info-icon.jpeg');
+        $assetsUrl = $this->getPluginFileUrl('assets/info-icon.png');
         $assetsUrl = str_replace("\\","/", $assetsUrl);
 
         $setupUrl = $this->api->createUrl('plugins/direct', 

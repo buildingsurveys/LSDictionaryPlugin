@@ -1,6 +1,6 @@
 
 function specIcon() { 
- return `<img src="${assetsUrl}" alt="info-icon" class="info-icon" width="18" height="18" />`; 
+ return `<img src="${assetsUrl}" alt="info-icon" class="info-icon" width="15" height="15" />`; 
 }
 
 const configs = {
