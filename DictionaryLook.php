@@ -296,8 +296,9 @@ class DictionaryLook extends PluginBase {
             $surveyId,
             $this->get('globalSurveyId')
         );
-        $totalTermList = array_merge($termList, $globalTermList);
-
+        // remove duplicate values
+        $totalTermList = array_unique(array_merge($termList, $globalTermList));
+        $totalTermList = array_values($totalTermList);;
         return CJSON::encode($totalTermList);
     }
 
