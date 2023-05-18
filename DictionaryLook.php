@@ -355,16 +355,13 @@ class DictionaryLook extends PluginBase {
         return $this->getPluginDir() . '/' . $relativePath;
     }
 
-    public function getValue($surveyId)
+    public function getQuestionColumnCodes($surveyId, $dictionarySurveyId)
     {
-        $dictionarySurveyId = $this->get('dictionarySurvey', 'Survey', $surveyId);
-        
         $termQuestionTitleSetting = $this->get('termQuestionCode', 'Survey', $surveyId);
         $definitionQuestionTitleSetting = $this->get('definitionQuestionCode', 'Survey', $surveyId);
 
         $sourceQuestion = Question::model()->findAllByAttributes(array(
             'sid' => $dictionarySurveyId,
-          
         ));
 
         // Get records
@@ -376,22 +373,21 @@ class DictionaryLook extends PluginBase {
         $questionDefColumnCode = $this->getSGQ($recordWithDefCode);
 
         return [$questionTermColumnCode, $questionDefColumnCode];
-
     }
 
     public function getTerms($surveyId, $dictionarySurveyId)
     {
         // Pickup Dictionary Survey terms
         $response = \SurveyDynamic::model($dictionarySurveyId)->findAll();
-        $values = $this->getValue($surveyId);
+        [$questionTermColumnCode, $questionDefColumnCode] =
+            $this->getQuestionColumnCodes($surveyId, $dictionarySurveyId);
     
         $termResponse = [];
-
         foreach($response as $value){
 
-            if($value[$values[0]] && $value[$values[1]]){
+            if($value[$questionTermColumnCode] && $value[$questionDefColumnCode]){
                 
-                array_push($termResponse, $value[$values[0]]);
+                array_push($termResponse, $value[$questionTermColumnCode]);
             }   
         }
         return $termResponse;    
@@ -400,15 +396,16 @@ class DictionaryLook extends PluginBase {
     public function getDefinitions($surveyId, $dictionarySurveyId, $term)
     {
     
-        $values = $this->getValue($surveyId);
+        [$questionTermColumnCode, $questionDefColumnCode] =
+            $this->getQuestionColumnCodes($surveyId, $dictionarySurveyId);
 
         $definitionRaw = SurveyDynamic::model($dictionarySurveyId)->findByAttributes(
             array(
-                $values[0] => $term,
+                $questionTermColumnCode => $term,
             )
         );
 
-        return $definitionRaw[$values[1]];
+        return $definitionRaw[$questionDefColumnCode];
     }
 
     protected function getRecordByTitle($questions, $title)
