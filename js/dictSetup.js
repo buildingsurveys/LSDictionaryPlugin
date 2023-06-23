@@ -105,12 +105,18 @@ function defineListDictOnSurvey(arrayDictList)
     }
 }
 
+/**
+ * Add information icon to the highlighted terms
+ */
+ 
+// Check if there is an icon defined in config
 function callbackDictLookupIconExists() {
     const { callbackDictLookupIcon } = configs;
     return typeof callbackDictLookupIcon != 'undefined'
         && typeof window[callbackDictLookupIcon] != 'undefined';
 }
 
+// Add information icon to the highlighted terms
 function addInformationIconToTerms() {
     const { callbackDictLookupIcon } = configs;
     const defaultIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>';
@@ -119,12 +125,22 @@ function addInformationIconToTerms() {
     $('.dictLookup').append(infoIcon);
 }
 
-$(document).ready(function(){
+$(document).ready(function()
+{
     let langCurrent = GetCurrPageLang();
 
+    // Clear, just in case there was some server-side markup.
     clearDictLookup()
 
+    // Get Terms
     let arrayDictList = recoverListDict(langCurrent);
+    
+    // Scan page and highlight
     defineListDictOnSurvey(arrayDictList);
+    
+    // Add information icon to the highlighted terms
     addInformationIconToTerms();
+    
+    // Trigger initialized Event
+    $(document).trigger('dictLook.initialized');
 });
