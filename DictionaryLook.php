@@ -377,6 +377,7 @@ class DictionaryLook extends PluginBase {
 
     public function getTerms($surveyId, $dictionarySurveyId)
     {
+        if(!$dictionarySurveyId) return [];
         // Pickup Dictionary Survey terms
         $response = \SurveyDynamic::model($dictionarySurveyId)->findAll();
         [$questionTermColumnCode, $questionDefColumnCode] =
