@@ -13,21 +13,23 @@ $(document).ready(function (){
             $('.popover').popover('hide');
         }
 
-        if(selectedElement.hasClass('info-icon')){
+        if(selectedElement.hasClass('info-icon') || selectedElement.hasClass('dictLookup')){
             evt.stopPropagation();
             evt.preventDefault();
             const dictLookupElement = selectedElement;
-            const parentElement = selectedElement.parent();
+            const elementWithTerm = selectedElement.hasClass('dictLookup') ?
+                selectedElement :
+                selectedElement.parent();
 
             /**
             * Init
             */
-            let term = replaceNbsps(parentElement.text());
+            let term = replaceNbsps(elementWithTerm.text());
 
             /**
              * Get Term from Data?
              */
-            let dataTerm = parentElement.attr('data-term');
+            let dataTerm = elementWithTerm.attr('data-term');
             if (typeof dataTerm != 'undefined') term = dataTerm;
 
             // Compose Title
@@ -35,11 +37,11 @@ $(document).ready(function (){
             let lang = GetCurrPageLang();
             console.log("Setting up popover for " + term, selectedElement);
             $.ajax({
-                url: _dictUrl + '&t=' + term + '&l=' + lang
+                url: _dictUrl + '&t=' + title + '&l=' + lang
             })
             .then(function(content) {
                 // Set the tooltip content upon successful retrieval
-                const popoverWithTerm = dictLookupElement.popover(defaultPopoverOptions(
+                dictLookupElement.popover(defaultPopoverOptions(
                     {
                         title,
                         html: true,
@@ -68,5 +70,4 @@ $(document).ready(function (){
         let re = new RegExp(String.fromCharCode(160), "g");
         return str.replace(re, " ");
     }
-    
 });
