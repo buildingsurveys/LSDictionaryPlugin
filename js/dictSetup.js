@@ -88,7 +88,7 @@ function defineListDictOnSurvey(arrayDictList)
             newPhrase = phraseText.replace(
                 regExpValue,
                 function(match, $1, $2, $3){
-                    return $1 + '<span class="dictLookup" data-term="' + $2 + '">' + $2 + '</span>' + $3;
+                    return $1 + '<span class="dictLookup">' + $2 + '</span>' + $3;
                 }
             );
             $(this).html(newPhrase);
