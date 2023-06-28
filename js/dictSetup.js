@@ -128,12 +128,8 @@ function addInformationIconToTerms()
     $('.dictLookup').each(function(){
         const $this = $(this);
         
-        // @todo: Use the same routine as on the dictLookup.js
         // Get term
-        let term = $this.data('term');
-        if (!term || term.length == 0) {
-            term = $this.text();
-        }
+        let term = getTermFromElement($this);
         
         // Add data to the info icon
         const $infoIcon = $(infoIcon);
