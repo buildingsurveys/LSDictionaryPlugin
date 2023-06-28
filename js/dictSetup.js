@@ -89,7 +89,7 @@ function defineListDictOnSurvey(arrayDictList)
             newPhrase = phraseText.replace(
                 regExpValue,
                 function(match, $1, $2, $3){
-                    return $1 + '<span class="dictLookup">' + $2 + '</span>' + $3;
+                    return $1 + '<span class="dictLookup" data-term="' + $2 + '">' + $2 + '</span>' + $3;
                 }
             );
             $(this).html(newPhrase);
@@ -117,12 +117,31 @@ function callbackDictLookupIconExists() {
 }
 
 // Add information icon to the highlighted terms
-function addInformationIconToTerms() {
+function addInformationIconToTerms() 
+{
+    // Get icon from config or default
     const { callbackDictLookupIcon } = configs;
     const defaultIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>';
     const infoIcon = callbackDictLookupIconExists() ? window[callbackDictLookupIcon]() : defaultIcon;
 
-    $('.dictLookup').append(infoIcon);
+    // Add the icon to all terms
+    $('.dictLookup').each(function(){
+        const $this = $(this);
+        
+        // @todo: Use the same routine as on the dictLookup.js
+        // Get term
+        let term = $this.data('term');
+        if (!term || term.length == 0) {
+            term = $this.text();
+        }
+        
+        // Add data to the info icon
+        const $infoIcon = $(infoIcon);
+        $infoIcon.attr('data-term', term);
+
+        $this.append($infoIcon);    
+    });
+    
 }
 
 $(document).ready(function()
