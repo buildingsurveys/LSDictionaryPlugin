@@ -88,7 +88,7 @@ function defineListDictOnSurvey(arrayDictList)
             newPhrase = phraseText.replace(
                 regExpValue,
                 function(match, $1, $2, $3){
-                    return $1 + '<span class="dictLookup">' + $2 + '</span>' + $3;
+                    return $1 + '<span class="dictLookup" data-term="' + $2 + '">' + $2 + '</span>' + $3;
                 }
             );
             $(this).html(newPhrase);
@@ -116,16 +116,33 @@ function callbackDictLookupIconExists() {
 }
 
 // Add information icon to the highlighted terms
-function addInformationIconToTerms() {
+function addInformationIconToTerms() 
+{
+    // Get icon from config or default
     const { callbackDictLookupIcon } = configs;
     const defaultIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>';
     const infoIcon = callbackDictLookupIconExists() ? window[callbackDictLookupIcon]() : defaultIcon;
 
-    $('.dictLookup').append(infoIcon);
+    // Add the icon to all terms
+    $('.dictLookup').each(function(){
+        const $this = $(this);
+        
+        // Get term
+        let term = getTermFromElement($this);
+        
+        // Add data to the info icon
+        const $infoIcon = $(infoIcon);
+        $infoIcon.attr('data-term', term);
+
+        $this.append($infoIcon);    
+    });
+    
 }
 
-$(document).ready(function()
+$(document).on('ready pjax:scriptcomplete',function()
 {
+    console.log('dictLook: Setting terms');
+    
     let langCurrent = GetCurrPageLang();
 
     // Clear, just in case there was some server-side markup.
@@ -140,6 +157,6 @@ $(document).ready(function()
     // Add information icon to the highlighted terms
     addInformationIconToTerms();
     
-    // Trigger initialized Event
-    $(document).trigger('dictLook.initialized');
+    // Trigger terms set Event
+    $(document).trigger('dictLook.termsSet');
 });
