@@ -37,6 +37,10 @@ class DictionaryLook extends PluginBase {
         $surveyId = $event->get('surveyId');
         $assetsUrl = $this->getPluginFileUrl('assets/info-icon.png');
         $assetsUrl = str_replace("\\","/", $assetsUrl);
+        $isActive = $this->isSurveySettingActive('active', $surveyId);
+        
+        if($isActive) return;
+      
 
         $setupUrl = $this->api->createUrl('plugins/direct', 
             array(

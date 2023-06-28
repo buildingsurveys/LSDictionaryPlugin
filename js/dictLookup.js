@@ -1,5 +1,5 @@
 $(document).ready(function (){
-    console.log('dictLook');
+
     const popoverTemplate = `
         <div class="popover" role="tooltip">
             <div class="arrow"></div>

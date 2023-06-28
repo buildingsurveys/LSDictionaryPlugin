@@ -28,7 +28,6 @@ function recoverListDict(langCurrent)
     })
     .done(function(data){
         arrayResult = data;
-        console.log(arrayResult)
     })
     .fail(function(xhr){
         console.log(xhr.responseText);
