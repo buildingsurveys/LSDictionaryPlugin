@@ -140,8 +140,10 @@ function addInformationIconToTerms()
     
 }
 
-$(document).ready(function()
+$(document).on('ready pjax:scriptcomplete',function()
 {
+    console.log('dictLook: Setting terms');
+    
     let langCurrent = GetCurrPageLang();
 
     // Clear, just in case there was some server-side markup.
@@ -156,6 +158,6 @@ $(document).ready(function()
     // Add information icon to the highlighted terms
     addInformationIconToTerms();
     
-    // Trigger initialized Event
-    $(document).trigger('dictLook.initialized');
+    // Trigger terms set Event
+    $(document).trigger('dictLook.termsSet');
 });
