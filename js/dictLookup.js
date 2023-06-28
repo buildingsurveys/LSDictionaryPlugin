@@ -1,5 +1,6 @@
-$(document).ready(function (){
-    console.log('dictLook');
+var termClickHandler = null;
+$(document).on('dictLook.termsSet',function (){
+    console.log('dictLook: Binding terms');
     const popoverTemplate = `
         <div class="popover" role="tooltip">
             <div class="arrow"></div>
@@ -8,7 +9,7 @@ $(document).ready(function (){
         </div>
     `;
 
-    $(document).on('click', documentClickHandler);
+    $(document).on('click tap touchstart', documentClickHandler);
     function documentClickHandler (evt) 
     {
         const selectedElement = $(evt.target);
@@ -23,16 +24,18 @@ $(document).ready(function (){
         $('.popover').popover('hide');
     }
     
-    $(document).on('click', '.info-icon, .dictLookup', termClickHandler);
-    function termClickHandler (evt) {
+    termClickHandler = function(evt) {
         evt.stopPropagation();
         evt.preventDefault();
+        
+        // Hide any open popover
+        hideAllPopovers();
 
         const selectedElement = $(evt.target);
         const dictLookupElement = selectedElement;
 
         // Get the term
-        term = getTermFromElement(selectedElement)
+        term = getTermFromElement(selectedElement);
 
         // Compose Title
         let title = term.substring(0, 3) != 'REF' ? term : 'Reference #' +  term.substring(3);
@@ -52,9 +55,13 @@ $(document).ready(function (){
                     template: popoverTemplate,
                 })
             ).popover('show');
-
+            
+            // Trigger termShown Event
+            dictLookupElement.trigger('dictLook.termShown');
+    
         });
     }
+    $(document).on('click', '.info-icon, .dictLookup', termClickHandler);
 
     function defaultPopoverOptions({content, title, placement = 'top', trigger = 'manual', ...rest}) {
         return {
@@ -67,6 +74,8 @@ $(document).ready(function (){
         }
     };
     
+    // Trigger initialized Event
+    $(document).trigger('dictLook.initialized');
 });
 
 function getTermFromElement(selectedElement)
