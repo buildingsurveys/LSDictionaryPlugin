@@ -123,20 +123,7 @@ function addInformationIconToTerms()
     const defaultIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>';
     const infoIcon = callbackDictLookupIconExists() ? window[callbackDictLookupIcon]() : defaultIcon;
 
-    // Add the icon to all terms
-    $('.dictLookup').each(function(){
-        const $this = $(this);
-        
-        // Get term
-        let term = getTermFromElement($this);
-        
-        // Add data to the info icon
-        const $infoIcon = $(infoIcon);
-        $infoIcon.attr('data-term', term);
-
-        $this.append($infoIcon);    
-    });
-    
+    $('.dictLookup').append(infoIcon);
 }
 
 $(document).on('ready pjax:scriptcomplete',function()

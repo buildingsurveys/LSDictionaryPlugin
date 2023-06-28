@@ -1,6 +1,6 @@
-var termClickHandler = null;
 $(document).on('dictLook.termsSet',function (){
     console.log('dictLook: Binding terms');
+    
     const popoverTemplate = `
         <div class="popover" role="tooltip">
             <div class="arrow"></div>
@@ -8,27 +8,24 @@ $(document).on('dictLook.termsSet',function (){
             <div class="popover-content popover-body"></div>
         </div>
     `;
+    
+    function hideAllPopovers() {
+        $('.popover').popover('hide');
+    }
 
-    $(document).on('click tap touchstart', documentClickHandler);
-    function documentClickHandler (evt) 
-    {
+    // If clicking outside a popover, hide popovers.
+    function popoverHideHandler (evt) {
         const selectedElement = $(evt.target);
-        // If clicking outside a popover, hide popovers.
         if ($('.popover').has(selectedElement).length === 0) {
             hideAllPopovers();
         }
     }
-    
-    function hideAllPopovers()
-    {
-        $('.popover').popover('hide');
-    }
-    
-    termClickHandler = function(evt) {
+
+    $(document).on('click tap touchstart', popoverHideHandler);
+
+    let termClickHandler = function(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-        
-        // Hide any open popover
         hideAllPopovers();
 
         const selectedElement = $(evt.target);
@@ -61,6 +58,7 @@ $(document).on('dictLook.termsSet',function (){
     
         });
     }
+
     $(document).on('click', '.info-icon, .dictLookup', termClickHandler);
 
     function defaultPopoverOptions({content, title, placement = 'top', trigger = 'manual', ...rest}) {
@@ -83,11 +81,8 @@ function getTermFromElement(selectedElement)
     // Get source term element
     let elementWithTerm = selectedElement.hasClass('dictLookup') ?
         selectedElement :
-        selectedElement.parents('.dictLookup');
+        selectedElement.parent();
 
-    // If no elementWithTerm found, go back to the selectedElement
-    if (elementWithTerm.length == 0) elementWithTerm = selectedElement;
-        
     // Get Term from Data?
     let dataTerm = elementWithTerm.attr('data-term');
     if (typeof dataTerm != 'undefined') {

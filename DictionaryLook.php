@@ -39,8 +39,7 @@ class DictionaryLook extends PluginBase {
         $assetsUrl = str_replace("\\","/", $assetsUrl);
         $isActive = $this->isSurveySettingActive('active', $surveyId);
         
-        if($isActive) return;
-      
+        if(!$isActive) return;
 
         $setupUrl = $this->api->createUrl('plugins/direct', 
             array(
