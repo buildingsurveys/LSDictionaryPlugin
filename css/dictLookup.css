@@ -9,6 +9,7 @@
 
 .dictLookup {
     border-bottom: 1px dashed #2382c0;
+    cursor: pointer;
 }
 
 .fruity .popover-header {
@@ -22,4 +23,5 @@
 
 .info-icon {
     margin-left: 0.25em;
+    cursor: pointer;
 }
