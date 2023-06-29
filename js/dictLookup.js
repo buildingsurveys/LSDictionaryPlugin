@@ -66,6 +66,7 @@ $(document).on('dictLook.termsSet',function (){
             content,
             title,
             trigger,
+            animation: false,
             container: 'body',
             placement: placement,
             ...rest

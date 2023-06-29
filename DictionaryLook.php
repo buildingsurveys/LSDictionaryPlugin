@@ -73,6 +73,8 @@ class DictionaryLook extends PluginBase {
         $client->registerScriptFile($this->getPluginFileUrl('js/dictSetup.js'));
         $client->registerScriptFile($this->getPluginFileUrl('js/language.js'));
         $client->registerScriptFile($this->getPluginFileUrl('js/dictLookup.js'));
+        $client->registerScriptFile($this->getPluginFileUrl('js/custom.js'));
+        $client->registerCssFile($this->getPluginFileUrl('css/custom.css'));
         $client->registerCssFile($this->getPluginFileUrl('css/dictLookup.css'));
     }
 

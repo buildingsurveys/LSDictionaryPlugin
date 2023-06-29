@@ -88,7 +88,7 @@ function defineListDictOnSurvey(arrayDictList)
             newPhrase = phraseText.replace(
                 regExpValue,
                 function(match, $1, $2, $3){
-                    return $1 + '<span class="dictLookup">' + $2 + '</span>' + $3;
+                    return $1 + '<span class="dictLookup" data-term="' + $2 + '">' + $2 + '</span>' + $3;
                 }
             );
             $(this).html(newPhrase);
@@ -123,7 +123,19 @@ function addInformationIconToTerms()
     const defaultIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>';
     const infoIcon = callbackDictLookupIconExists() ? window[callbackDictLookupIcon]() : defaultIcon;
 
-    $('.dictLookup').append(infoIcon);
+    // Add the icon to all terms
+    $('.dictLookup').each(function(){
+        const dictLookupElement = $(this);
+
+        // Get term
+        let term = getTermFromElement(dictLookupElement)
+
+        // Add data to the info icon
+        const $infoIcon = $(infoIcon);
+        $infoIcon.attr('data-term', term);
+
+        dictLookupElement.append($infoIcon);    
+    });
 }
 
 $(document).on('ready pjax:scriptcomplete',function()
