@@ -121,7 +121,9 @@ function addInformationIconToTerms()
     // Get icon from config or default
     const { callbackDictLookupIcon } = configs;
     const defaultIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>';
-    const infoIcon = callbackDictLookupIconExists() ? window[callbackDictLookupIcon]() : defaultIcon;
+    const infoIcon = callbackDictLookupIconExists() && typeof iconImage === 'string' ?
+        window[callbackDictLookupIcon](iconImage) : 
+        defaultIcon;
 
     // Add the icon to all terms
     $('.dictLookup').each(function(){
