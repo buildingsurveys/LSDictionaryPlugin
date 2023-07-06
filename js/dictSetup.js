@@ -111,18 +111,19 @@ function defineListDictOnSurvey(arrayDictList)
  
 // Check if there is an icon defined in config
 function callbackDictLookupIconExists() {
-    const { callbackDictLookupIcon } = configs;
+    const { callbackDictLookupIcon, iconImage } = configs;
     return typeof callbackDictLookupIcon != 'undefined'
-        && typeof window[callbackDictLookupIcon] != 'undefined';
+        && typeof window[callbackDictLookupIcon] != 'undefined'
+        && typeof iconImage === 'string' ;
 }
 
 // Add information icon to the highlighted terms
 function addInformationIconToTerms() 
 {
     // Get icon from config or default
-    const { callbackDictLookupIcon } = configs;
+    const { callbackDictLookupIcon, iconImage } = configs;
     const defaultIcon = '<span class="fa fa-info-circle info-icon" aria-hidden="true"></span>';
-    const infoIcon = callbackDictLookupIconExists() && typeof iconImage === 'string' ?
+    const infoIcon = callbackDictLookupIconExists() ?
         window[callbackDictLookupIcon](iconImage) : 
         defaultIcon;
 
