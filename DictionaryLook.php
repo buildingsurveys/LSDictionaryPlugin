@@ -203,11 +203,12 @@ class DictionaryLook extends PluginBase {
      */ 
     public function newDirectRequest() 
     { 
-        header("Content-type: application/json");
         // Don't output full body. Just this json.
         $oEvent = $this->event; 
  
         if ($oEvent->get('target') != $this->getName()) return; 
+ 
+        header("Content-type: application/json");
  
         // Init 
  
