@@ -1,3 +1,7 @@
+// Setting the termClickHandler as global 
+// as to be able to be reused on custom event handlers.
+// Ex: May need to associate it to new items when splitting the term and the image.
+var termClickHandler = null;
 $(document).on('dictLook.termsSet',function (){
     console.log('dictLook: Binding terms');
     
@@ -13,9 +17,9 @@ $(document).on('dictLook.termsSet',function (){
         $('.popover').popover('hide');
     }
 
-    // If clicking outside a popover, hide popovers.
     function popoverHideHandler (evt) {
         const selectedElement = $(evt.target);
+        // If clicking outside a popover, hide popovers.
         if ($('.popover').has(selectedElement).length === 0) {
             hideAllPopovers();
         }
@@ -23,9 +27,11 @@ $(document).on('dictLook.termsSet',function (){
 
     $(document).on('click tap touchstart', popoverHideHandler);
 
-    let termClickHandler = function(evt) {
+    termClickHandler = function(evt) {
         evt.stopPropagation();
         evt.preventDefault();
+
+        // Hide any open popover
         hideAllPopovers();
 
         const selectedElement = $(evt.target);
@@ -82,7 +88,10 @@ function getTermFromElement(selectedElement)
     // Get source term element
     let elementWithTerm = selectedElement.hasClass('dictLookup') ?
         selectedElement :
-        selectedElement.parent();
+        selectedElement.parents('.dictLookup');
+
+    // If no elementWithTerm found, go back to the selectedElement
+    if (elementWithTerm.length == 0) elementWithTerm = selectedElement;
 
     // Get Term from Data?
     let dataTerm = elementWithTerm.attr('data-term');
