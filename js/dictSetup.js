@@ -70,8 +70,9 @@ function defineListDictOnSurvey(arrayDictList)
     const { termScanSelector } = configs;
     const scapedChars = {
         '\?': '\\?',
+        '\!': '\\!',
     };
-    const scaperCharsRegex = /[?]/g;
+    const scapedCharsRegex = /[!?]/g;
 
     arrayDictList = sortListDictByWordCount(arrayDictList);
 
@@ -86,8 +87,12 @@ function defineListDictOnSurvey(arrayDictList)
             // @todo: Apply this: https://stackoverflow.com/questions/3460004/regexp-to-search-replace-only-text-not-in-html-attribute
             // Search
             let phraseText = $(this).html().trim();
-            const scapedTerm = term.replace(scaperCharsRegex, (match) => scapedChars[match])
-            let regExpValue = new RegExp('(\\b)(' + scapedTerm + ')',"gi");
+            const endsWithSpecialChar =  Object.keys(scapedChars).some((specialChar) => term.endsWith(specialChar));
+            const scapedTerm = endsWithSpecialChar ?
+                term.replace(scapedCharsRegex, (match) => scapedChars[match])
+                : term;
+            const pattern = endsWithSpecialChar ? '(\\b)(' + scapedTerm + ')' : '(\\b)(' + scapedTerm + ')(\\b)'
+            let regExpValue = new RegExp(pattern, "gi");
 
             // return if expression fail
             if(!regExpValue.test(phraseText)) return;
